@@ -1,0 +1,9 @@
+FROM node:8.9.4
+
+WORKDIR /app
+COPY package*.json .
+
+RUN npm i
+COPY . .
+RUN mv .env.example .env
+CMD npm start
