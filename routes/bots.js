@@ -3,7 +3,6 @@ const ClientOAuth2 = require('client-oauth2');
 const request = require('request-promise');
 const router = require('express').Router();
 const IntentResolver = require('../lib/IntentResolver');
-const MewsService = require('../services/MewsServices');
 
 const app = express();
 
@@ -63,7 +62,7 @@ router.post('/webhook', async (req, res) => {
     }
 
     return res.status(response.statusCode).send({
-      ok: Number(response.statusCode / 100 === 200),
+      ok: Number(response.statusCode === 201),
       message: response.body,
     });
   } catch (err) {
