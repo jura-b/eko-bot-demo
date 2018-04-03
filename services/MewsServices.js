@@ -30,7 +30,8 @@ class MewsService {
   async getRoomRevenue({ toDateString }) {
     const toDate = this.parseToDateStringToTimeUnit(toDateString);
     let items = await this.getAllItems(toDate);
-    items = items.filter(item => item.AccountingCategoryId === MewsService.ACCOMMODATION_ACCOUNTING_CATEGORY_ID);
+    items = items.filter(item =>
+      item.AccountingCategoryId === MewsService.ACCOMMODATION_ACCOUNTING_CATEGORY_ID);
 
     const revenue = items.reduce((acc, item) => acc + item.Amount.Net, 0);
     return revenue;
@@ -56,7 +57,8 @@ class MewsService {
     const totalRoomCount = (await this.getAllSpaces()).length;
 
     const toDate = this.parseToDateStringToTimeUnit(toDateString);
-    const dayCount = (moment().endOf(toDate).dayOfYear() - moment().startOf(toDate).dayOfYear()) + 1;
+    const dayCount =
+      (moment().endOf(toDate).dayOfYear() - moment().startOf(toDate).dayOfYear()) + 1;
 
     return roomRevenue / (totalRoomCount * dayCount);
   }
