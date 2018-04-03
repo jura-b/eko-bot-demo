@@ -13,53 +13,60 @@ const ekoAuth = new ClientOAuth2({
   scopes: ['bot'],
 });
 
-router.post('/webhook', async (req, res) => {
-  const event = req.body && req.body.events[0];
-  let token = app.get('token');
+const authenticate = async () => {
+  const { data } = await ekoAuth.credentials.getToken();
+  app.set('token', data);
+};
 
+const sendMessage = async (message, replyToken) => {
+  if (!app.get('token')) throw new Error('No token');
+
+  const options = {
+    uri: `${process.env.EKO_HTTP_URI}/bot/v1/message/text`,
+    headers: {
+      Authorization: `Bearer ${app.get('token').access_token}`,
+    },
+    json: true,
+    body: {
+      replyToken,
+      message,
+    },
+    resolveWithFullResponse: true,
+  };
+  return request.post(options);
+};
+
+const trySendMessage = async (message, replyToken) => {
   try {
-    if (!token) {
-      const { data } = await ekoAuth.credentials.getToken();
-      token = data;
-      app.set('token', token);
+    return sendMessage(message, replyToken);
+  } catch (err) {
+    if (err.statusCode === 401) {
+      // maybe token expired, get new one
+      await authenticate();
+      // retry rquest
+      return sendMessage(message, replyToken);
+    }
+    throw err;
+  }
+};
+
+
+router.post('/webhook', async (req, res) => {
+  try {
+    const event = req.body && req.body.events[0];
+    if (!app.get('token')) {
+      await authenticate();
     }
 
+    // special case
+    if (event.message.text.toLowerCase() === 'all') {
+      await trySendMessage('Hold on a sec ...', event.replyToken);
+    }
 
     // resolve incoming text
     const intentResolver = new IntentResolver();
     const message = await intentResolver.resolveAsText(event.message.text);
-
-    const options = {
-      uri: `${process.env.EKO_HTTP_URI}/bot/v1/message/text`,
-      headers: {
-        Authorization: `Bearer ${token.access_token}`,
-      },
-      json: true,
-      body: {
-        replyToken: event.replyToken,
-        message,
-      },
-      resolveWithFullResponse: true,
-    };
-
-    let response;
-    try {
-      response = await request.post(options);
-    } catch (err) {
-      if (err.statusCode === 401) {
-        // maybe token expired, get new one
-        const { data } = await ekoAuth.credentials.getToken();
-        token = data;
-        // reassign the token
-        app.set('token', token);
-        options.headers.Authorization = `Bearer ${token.access_token}`;
-
-        // retry rquest
-        response = await request.post(options);
-      } else {
-        throw err;
-      }
-    }
+    const response = await trySendMessage(message, event.replyToken);
 
     return res.status(response.statusCode).send({
       ok: Number(response.statusCode === 201),
