@@ -53,19 +53,26 @@ const trySendMessage = async (message, replyToken) => {
 
 router.post('/webhook', async (req, res) => {
   try {
+    // 1. Extract the event
     const event = req.body && req.body.events[0];
+
+    // 2. Authenticate if not authenticated
     if (!app.get('token')) {
       await authenticate();
     }
+
+
+    // 3. Resolve incoming text, these will be your application logic
 
     // special case
     if (event.message.text.toLowerCase() === 'all') {
       await trySendMessage('Hold on a sec ...', event.replyToken);
     }
 
-    // resolve incoming text
     const intentResolver = new IntentResolver();
     const message = await intentResolver.resolveAsText(event.message.text);
+
+    // 4. Reply the message back as text
     const response = await trySendMessage(message, event.replyToken);
 
     return res.status(response.statusCode).send({
