@@ -64,10 +64,8 @@ router.post('/webhook', async (req, res) => {
 
     // 3. Resolve incoming text, these will be your application logic
 
-    // special case
-    if (event.message.text.toLowerCase() === 'all') {
-      await trySendMessage('Hold on a sec ...', event.replyToken);
-    }
+    // Tell user to keep calm
+    await trySendMessage('Hold on a sec ...', event.replyToken);
 
     const intentResolver = new IntentResolver();
     const message = await intentResolver.resolveAsText(event.message.text);
