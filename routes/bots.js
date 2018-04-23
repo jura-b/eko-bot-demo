@@ -14,6 +14,8 @@ const ekoAuth = new ClientOAuth2({
 });
 
 const authenticate = async () => {
+  // authenticate using OAuth 2.0 Grant type client_credential
+  // https://www.oauth.com/oauth2-servers/access-tokens/client-credentials/
   const { data } = await ekoAuth.credentials.getToken();
   app.set('token', data);
 };
@@ -60,7 +62,6 @@ router.post('/webhook', async (req, res) => {
     if (!app.get('token')) {
       await authenticate();
     }
-
 
     // 3. Resolve incoming text, these will be your application logic
 
