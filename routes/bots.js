@@ -3,6 +3,7 @@ const ClientOAuth2 = require('client-oauth2');
 const request = require('request-promise');
 const router = require('express').Router();
 const IntentResolver = require('../lib/IntentResolver');
+const DialogFlowService = require('../services/DialogFlowService');
 
 const app = express();
 
@@ -68,8 +69,20 @@ router.post('/webhook', async (req, res) => {
     // Tell user to keep calm
     await trySendMessage('Hold on a sec ...', event.replyToken);
 
+    let intent;
+    if (process.env.ENABLE_DIALOG_FLOW) {
+      const dialogFlowService = new DialogFlowService();
+      intent = await dialogFlowService.detectIntent(event.message.text);
+    } else {
+      intent = {
+        action: 'input.unknown',
+        queryText: event.message.text,
+        fulfillmentText: 'This is default message.',
+      };
+    }
+
     const intentResolver = new IntentResolver();
-    const message = await intentResolver.resolveAsText(event.message.text);
+    const message = await intentResolver.setIntent(intent).fulfillAsText();
 
     // 4. Reply the message back as text
     const response = await trySendMessage(message, event.replyToken);
@@ -83,5 +96,17 @@ router.post('/webhook', async (req, res) => {
     return res.status(err.code || 400).send(err);
   }
 });
+
+router.get('/test', async (req, res) => {
+  try {
+    const dialogFlowService = new DialogFlowService();
+    const result = await dialogFlowService.resolveIntent('test');
+    return res.status(200).send(result);
+  } catch (err) {
+    console.log('/bots/test', err);
+    return res.status(err.code || 400).send(err);
+  }
+});
+
 
 module.exports = router;
