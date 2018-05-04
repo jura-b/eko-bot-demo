@@ -12,6 +12,8 @@ class DialogFlowService {
 
     if (!query) throw new Error('No query defined');
 
+    console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+    console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
     // Instantiates a sessison client
     const sessionClient = new dialogflow.SessionsClient();
 
