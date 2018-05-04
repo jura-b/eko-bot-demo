@@ -12,6 +12,13 @@ const debug = require('debug')('ekobotdemo:server');
 const http = require('http');
 
 /**
+ * Set up GOOGLE_APPLICATION_CREDENTIALS
+ */
+if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  process.env.GOOGLE_APPLICATION_CREDENTIALS = require('../google-application-credentials');
+}
+
+/**
  * Get port from environment and store in Express.
  */
 
