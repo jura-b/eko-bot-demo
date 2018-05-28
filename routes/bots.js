@@ -2,8 +2,9 @@ const express = require('express');
 const ClientOAuth2 = require('client-oauth2');
 const request = require('request-promise');
 const router = require('express').Router();
-const IntentResolver = require('../lib/IntentResolver');
+const IntentResolver = require('../lib/IntentResolver.V2');
 const DialogFlowService = require('../services/DialogFlowService');
+const StopWatch = require('../lib/StopWatch');
 
 const app = express();
 
@@ -69,6 +70,9 @@ router.post('/webhook', async (req, res) => {
     // Tell user to keep calm
     await trySendMessage('Hold on a sec ...', event.replyToken);
 
+    // Just capture time to debug performance
+    const stopWatch = (new StopWatch()).start();
+
     let intent;
     if (process.env.ENABLE_DIALOG_FLOW) {
       const dialogFlowService = new DialogFlowService();
@@ -83,16 +87,16 @@ router.post('/webhook', async (req, res) => {
 
     const intentResolver = new IntentResolver();
     const message = await intentResolver.setIntent(intent).fulfillAsText();
+    stopWatch.stop();
 
     // 4. Reply the message back as text
-    const response = await trySendMessage(message, event.replyToken);
+    const response = await trySendMessage(`${message}\n\n(${stopWatch.getTimeConsumed('seconds')} s)`, event.replyToken);
 
     return res.status(response.statusCode).send({
       ok: Number(response.statusCode === 201),
       message: response.body,
     });
   } catch (err) {
-    console.log('/bots/webhook', err);
     return res.status(err.code || 400).send(err);
   }
 });

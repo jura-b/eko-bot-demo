@@ -144,25 +144,3 @@ class MewsService {
 }
 
 module.exports = MewsService;
-
-/*
-  startOf(string) {
-    const toDateString = this.parseToDateStringToTimeUnit(string);
-    const now = moment();
-    if (string === 'yesterday') {
-      now.subtract(24, 'hours');
-    }
-    return now.startOf(toDateString).toISOString();
-  }
-
-  endOf(string) {
-    console.log('​endOf -> string', string);
-    const toDateString = this.parseToDateStringToTimeUnit(string);
-    let now = moment();
-    if (string === 'yesterday') {
-      console.log(1);
-      now = now.subtract(24, 'hours');
-    }
-    return now.endOf(toDateString).toISOString();
-  }
-  */
