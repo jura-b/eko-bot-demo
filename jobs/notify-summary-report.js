@@ -12,11 +12,16 @@ module.exports = async () => {
 
   const pmsService = PmsServiceUtil.getService();
 
-  let dateTimePeriod = DateTimeResolver.asDatePeriod('today');
+  const now = new Date();
+  now.setDate(now.getDate() - 1);
+  const yesterday = now;
+
+  let dateTimePeriod = DateTimeResolver.asDatePeriod(yesterday);
   let reportObjects = [
     PmsReportUtil.getReportObject('occupancy rate', { dateTimePeriod }, pmsService),
     PmsReportUtil.getReportObject('average daily rate', { dateTimePeriod }, pmsService),
     PmsReportUtil.getReportObject('revenue par', { dateTimePeriod }, pmsService),
+    PmsReportUtil.getReportObject('service revenue', { dateTimePeriod, serviceName: 'spa' }, pmsService),
   ];
 
   dateTimePeriod = DateTimeResolver.asDatePeriod('month to date');
@@ -24,6 +29,7 @@ module.exports = async () => {
     PmsReportUtil.getReportObject('occupancy rate', { dateTimePeriod }, pmsService),
     PmsReportUtil.getReportObject('average daily rate', { dateTimePeriod }, pmsService),
     PmsReportUtil.getReportObject('revenue par', { dateTimePeriod }, pmsService),
+    PmsReportUtil.getReportObject('service revenue', { dateTimePeriod, serviceName: 'spa' }, pmsService),
   ]);
 
   dateTimePeriod = DateTimeResolver.asDatePeriod('year to date');
@@ -31,6 +37,7 @@ module.exports = async () => {
     PmsReportUtil.getReportObject('occupancy rate', { dateTimePeriod }, pmsService),
     PmsReportUtil.getReportObject('average daily rate', { dateTimePeriod }, pmsService),
     PmsReportUtil.getReportObject('revenue par', { dateTimePeriod }, pmsService),
+    PmsReportUtil.getReportObject('service revenue', { dateTimePeriod, serviceName: 'spa' }, pmsService),
   ]);
 
   let message;
@@ -42,8 +49,9 @@ module.exports = async () => {
     message = `An error has occured: ${err.toString()}`;
     console.info(`Job Error: notify-summary-report (${err.message})`);
   } finally {
-    await messageService.notifyText(`${message}\n\n(${stopWatch.stop().getTimeConsumed('seconds')} s)`);
+    const timeConsumed = stopWatch.stop().getTimeConsumed('seconds');
+    await messageService.notifyText(`Daily PMS Report for\n\n${message}`);
 
-    console.info(`Job done: notify-summary-report (${stopWatch.getTimeConsumed('seconds')})`);
+    console.info(`Job done: notify-summary-report (${timeConsumed})`);
   }
 };

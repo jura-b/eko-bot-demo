@@ -17,12 +17,18 @@ class MessageService {
     this.accessToken = await auth.getToken();
   }
 
-  async notifyText(text, firstTry = true) {
+  async notifyText(text, attempt = 0) {
+    if (attempt > 2) {
+      return this.internalServerErrorResponse('Request re-attempt reaches limit.');
+    }
+    attempt += 1;
+
     let response;
     try {
       response = await this.sendNotifyTextRequest(text);
     } catch (err) {
-      if (err.statusCode === 401 && firstTry) {
+      const statusCode = (response && response.statusCode) || (err && err.statusCode);
+      if (statusCode === 401) {
         await this.authenticate();
         return this.notifyText(text, false);
       }
@@ -31,14 +37,20 @@ class MessageService {
     return this.parseResponse(response);
   }
 
-  async messageText(text, replyToken, firstTry = true) {
+  async messageText(text, replyToken, attempt = 0) {
+    if (attempt > 2) {
+      return this.internalServerErrorResponse('Request re-attempt reaches limit.');
+    }
+    attempt += 1;
+
     let response;
     try {
       response = await this.sendMessageTextRequest(text, replyToken);
     } catch (err) {
-      if (err.statusCode === 401 && firstTry) {
+      const statusCode = (response && response.statusCode) || (err && err.statusCode);
+      if (statusCode === 401) {
         await this.authenticate();
-        return this.notifyText(text, false);
+        return this.messageText(text, replyToken, attempt);
       }
     }
 
@@ -70,8 +82,16 @@ class MessageService {
   parseResponse(response) {
     return {
       statusCode: response.statusCode,
-      body: response.body,
+      body: response.body ? response.body : '',
       ok: Math.floor(response.statusCode / 100) === 2,
+    };
+  }
+
+  internalServerErrorResponse(message) {
+    return {
+      statusCode: 500,
+      body: message,
+      ok: false,
     };
   }
 }

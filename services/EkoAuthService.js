@@ -1,5 +1,7 @@
 const ClientOAuth2 = require('client-oauth2');
 
+const LEEWAY = 60 * 1000; // 60 secs
+
 class EkoAuthService {
   constructor() {
     const ekoAuth = new ClientOAuth2({
@@ -14,16 +16,16 @@ class EkoAuthService {
   async getToken() {
     const now = new Date().getTime();
 
-    if (this.accessToken) {
-      const isAlive = (this.grantTimeStamp + (this.accessToken.expires_in * 1000)) > now;
-      if (isAlive) return this.accessToken.access_token;
+    const tokenData = this.token && this.token.data;
+    if (tokenData) {
+      const isAlive = ((this.grantTimeStamp + (tokenData.expires_in * 1000)) - LEEWAY) > now;
+      if (isAlive) return tokenData.access_token;
     }
 
     this.grantTimeStamp = now;
-    const { data } = await this.client.credentials.getToken();
-    this.accessToken = data;
+    this.token = await this.client.credentials.getToken();
 
-    return data.access_token;
+    return this.token.data.access_token;
   }
 }
 

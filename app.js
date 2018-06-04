@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/bots', require('./routes/bots'));
+app.use('/bots', require('./routes/bots.v2'));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -5,7 +5,7 @@ const ScheduleReportService = require('./services/ScheduleReportService');
 
 const scheduleReportService = new ScheduleReportService();
 scheduleReportService.setSchedule({
-  minute: 21,
+  minute: 0,
 });
 
 scheduleReportService.start(require('./jobs/notify-summary-report'));

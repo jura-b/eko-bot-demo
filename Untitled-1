@@ -1,0 +1,62 @@
+curl "https://api.getimpala.com/v1/hotel/0c8d7dcb-9c02-438f-9ed7-6ac697485431/room-type/availability\
+?startDate=2018-05-15\
+&endDate=2018-05-15"\
+  -H "Authorization: Bearer 50a5bd67cca6ff308f7b0447507cb15fc49c76563d6165ad897e671e9c890d2c299598d881116d067dc384f77c9b494e"
+
+curl "https://api.getimpala.com/v1/hotel/0c8d7dcb-9c02-438f-9ed7-6ac697485431/room\
+?startDate=2018-05-15\
+&endDate=2018-05-15"\
+  -H "Authorization: Bearer 50a5bd67cca6ff308f7b0447507cb15fc49c76563d6165ad897e671e9c890d2c299598d881116d067dc384f77c9b494e"
+
+curl "https://api.getimpala.com/v1/hotel/0c8d7dcb-9c02-438f-9ed7-6ac697485431/booking\
+?startDate=2018-05-15\
+&endDate=2018-05-15"\
+  -H "Authorization: Bearer 50a5bd67cca6ff308f7b0447507cb15fc49c76563d6165ad897e671e9c890d2c299598d881116d067dc384f77c9b494e"
+
+curl "https://api.getimpala.com/v1/hotel/0c8d7dcb-9c02-438f-9ed7-6ac697485431/booking" \
+  -H "Authorization: Bearer 50a5bd67cca6ff308f7b0447507cb15fc49c76563d6165ad897e671e9c890d2c299598d881116d067dc384f77c9b494e"
+
+curl "https://api.getimpala.com/v1/hotel/0c8d7dcb-9c02-438f-9ed7-6ac697485431/room-type" \
+  -H "Authorization: Bearer 50a5bd67cca6ff308f7b0447507cb15fc49c76563d6165ad897e671e9c890d2c299598d881116d067dc384f77c9b494e"
+
+
+{
+    "_id" : ObjectId("5a324c0f3325fa0fc60ce9e1"),
+    "firstname" : "ABHAICHON",
+    "lastname" : "VACHARASINTHU",
+    "email" : "",
+    "network_uid" : "10296054",
+    "username" : "abhaichon.vac@cpf.co.th",
+    "ad_domain" : "cpf.co.th",
+    "extras" : {
+        "5900b1e131b76f0001fe17dd" : "Advance Pharma Co.,Ltd.",
+        "5900b1d231b76f0001fe17db" : "ด้านประสานกิจการสัมพันธ์",
+        "5900b1c731b76f0001fe17d9" : "ซี.พี.ทาวเวอร์ 1 ชั้น25",
+        "5900b1b331b76f0001fe17d7" : "",
+        "5900b1aa31b76f0001fe17d5" : "",
+        "5900b0fd31b76f0001fe17be" : "วัชรสินธุ์",
+        "5900b0f531b76f0001fe17bc" : "อภัยชนม์",
+        "5900b06331b76f0001fe17ab" : "นาย"
+    },
+    "nid" : ObjectId("5821ddb4bb09157cc0971cc9"),
+    "roleIDs" : [
+        ObjectId("5ae1a31aed22e300108a2d79")
+    ],
+    "engagementActivity" : [],
+    "redeemedPoints" : 0,
+    "totalPoints" : 0,
+    "notificationSettings" : null,
+    "suspendedTill" : null,
+    "is_licensed" : true,
+    "invited" : false,
+    "deleted" : false,
+    "stickerPacks" : [],
+    "contacts" : [],
+    "tags" : [],
+    "admin_panel_access" : false,
+    "network_admin" : false,
+    "loginCount" : 0,
+    "firstname_first_character" : "A",
+    "__v" : 0,
+    "settings" : {}
+}
