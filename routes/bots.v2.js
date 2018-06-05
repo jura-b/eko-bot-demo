@@ -16,7 +16,13 @@ router.post('/webhook', async (req, res) => {
     const stopWatch = (new StopWatch()).start();
 
     let intent;
-    if (process.env.ENABLE_DIALOG_FLOW) {
+    if (event.message.text === 'help') {
+      intent = {
+        action: 'help',
+        queryText: event.message.text,
+        fulfillmentText: 'Help.',
+      };
+    } else if (process.env.ENABLE_DIALOG_FLOW) {
       const dialogFlowService = new DialogFlowService();
       intent = await dialogFlowService.detectIntent(event.message.text);
     } else {

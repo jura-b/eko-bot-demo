@@ -24,7 +24,7 @@ class PmsReportUtil {
         functionName: 'getAverageDailyRate',
         service: pmsService,
         dateTimePeriod,
-        unit: 'GBP',
+        unit: ' GBP',
       },
       'revenue par': {
         name: 'revenue par',
@@ -32,7 +32,7 @@ class PmsReportUtil {
         functionName: 'getRevenuePar',
         service: pmsService,
         dateTimePeriod,
-        unit: 'GBP',
+        unit: ' GBP',
       },
       'service revenue': {
         name: 'service revenue',
@@ -45,7 +45,7 @@ class PmsReportUtil {
         arguments: {
           serviceName,
         },
-        unit: 'GBP',
+        unit: ' GBP',
       },
     };
 
@@ -59,7 +59,7 @@ class PmsReportUtil {
     if (typeof reportObject.prettyName === 'function') {
       reportObject.prettyName = reportObject.prettyName();
     }
-    return `${reportObject.dateTimePeriod.prettyString} ${reportObject.prettyName}: ${result} ${reportObject.unit}`;
+    return `${reportObject.dateTimePeriod.prettyString} ${reportObject.prettyName}: ${result}${reportObject.unit}`;
   }
 
   static async executeReport(reportObject) {
@@ -74,6 +74,23 @@ class PmsReportUtil {
     } catch (err) {
       return err.prettyMessage || 'Data currently unavailable.';
     }
+  }
+
+  static async executeReportAsObject(reportObject) {
+    const {
+      functionName, service, dateTimePeriod,
+      arguments: args,
+    } = reportObject;
+
+    let result;
+    try {
+      result = await service[functionName](dateTimePeriod, args);
+    } catch (err) {
+      result = err.prettyMessage || 'Data currently unavailable.';
+    }
+
+    reportObject.result = result;
+    return reportObject;
   }
 
   static assignResult(reportObject, calculationResult) {
