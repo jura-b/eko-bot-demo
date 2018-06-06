@@ -66,7 +66,7 @@ module.exports = async () => {
       generateReportSection('Occupancy Rate', ocrResult),
       generateReportSection('Average Daily Rate', adrResult),
       generateReportSection('Revenue Par', revParResult),
-      generateReportSection('Revenue Centers (total 1)', serviceResult),
+      generateReportSection(`Revenue Center (total ${serviceResult[0].result.toFixed(2)}${serviceResult[0].unit})`, serviceResult),
     ].join('\n\n');
   } catch (err) {
     message = `An error has occured: ${err.toString()}`;
