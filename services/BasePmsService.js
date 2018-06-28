@@ -82,17 +82,14 @@ class BasePmsService {
       const error = new Error('Start date exceed end date');
       error.prettyMessage = 'Start date must not exceed end date.';
       error.name = 'MewsServiceDateTimePeriodError';
-      throw error;
+      throw this.constructor.UnsupportDateTimePeriodError('Start date exceed end date', 'Start date must not exceed end date.');
     }
   }
 
   validateExceedFuture(dateTimePeriod) {
     const now = moment();
     if (now.diff(dateTimePeriod.end) < 0 && now.diff(dateTimePeriod.start) < 0) {
-      const error = new Error('Date exceed future');
-      error.prettyMessage = 'Future data not available.';
-      error.name = 'MewsServiceDateTimePeriodError';
-      throw error;
+      throw this.constructor.UnsupportDateTimePeriodError('Unavailable future data', 'Future data is not available.');
     }
   }
 
@@ -103,6 +100,35 @@ class BasePmsService {
     return error;
   }
 
+  static UnsupportDateTimePeriodError(message, prettyMessage = '') {
+    const error = new Error(`Unsupport date time period, ${message}`);
+    error.prettyMessage = 'Sorry, unsupported date period.';
+    if (prettyMessage) {
+      error.prettyMessage = `${error.prettyMessage} ${prettyMessage}`;
+    }
+    error.name = 'UnsupportDateTimePeriodError';
+    return error;
+  }
+
+  static DataNotAvailableError(message, prettyMessage = '') {
+    const error = new Error(`Data not available, ${message}`);
+    error.prettyMessage = 'Sorry, we can\'t find the requested date.';
+    if (prettyMessage) {
+      error.prettyMessage = `${error.prettyMessage} ${prettyMessage}`;
+    }
+    error.name = 'DataNotAvailableError';
+    return error;
+  }
+
+  static DataIncompleteError(message, prettyMessage = '') {
+    const error = new Error(`Data incomplete, ${message}`);
+    error.prettyMessage = 'Sorry, we can\'t get the requested date.';
+    if (prettyMessage) {
+      error.prettyMessage = `${error.prettyMessage} ${prettyMessage}`;
+    }
+    error.name = 'DataNotAvailableError';
+    return error;
+  }
 
   /**
    * @abstract

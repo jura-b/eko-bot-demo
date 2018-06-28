@@ -1,5 +1,6 @@
 const mewsService = require('../services/MewsServices.V2');
 const impalaService = require('../services/ImpalaService');
+const comancheService = require('../services/ComancheService');
 
 class PmsServiceUtil {
   static getService() {
@@ -12,6 +13,8 @@ class PmsServiceUtil {
       return mewsService;
     } else if (name.toLowerCase() === 'impala') {
       return impalaService;
+    } else if (name.toLowerCase() === 'comanche') {
+      return comancheService;
     }
 
     throw new Error('Unknown PMS service name');

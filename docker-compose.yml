@@ -1,7 +1,7 @@
 version: '2'
 services:
   eko-bot-demo:
-    image: eko-bot-demo:latest
+    image: 826057481178.dkr.ecr.ap-southeast-1.amazonaws.com/eko-bot-demo:latest
     restart: always
     command: npm start
     env_file: .env_vars
@@ -16,7 +16,7 @@ services:
         max-size: 5m
         max-file: '5'
   eko-bot-demo-notify:
-    image: eko-bot-demo:latest
+    image: 826057481178.dkr.ecr.ap-southeast-1.amazonaws.com/eko-bot-demo:latest
     restart: always
     command: node app_schedule.js
     env_file: .env_vars
