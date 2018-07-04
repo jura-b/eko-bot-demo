@@ -59,7 +59,7 @@ class PmsReportUtil {
     if (typeof reportObject.prettyName === 'function') {
       reportObject.prettyName = reportObject.prettyName();
     }
-    return `${reportObject.dateTimePeriod.prettyString} ${reportObject.prettyName}: ${result}${reportObject.unit}`;
+    return `${reportObject.dateTimePeriod.prettyString} ${reportObject.prettyName}: ${result}${reportObject.isError ? '' : reportObject.unit}`;
   }
 
   static async executeReport(reportObject) {
@@ -87,6 +87,7 @@ class PmsReportUtil {
       result = await service[functionName](dateTimePeriod, args);
     } catch (err) {
       result = err.prettyMessage || 'Data currently unavailable.';
+      reportObject.isError = true;
     }
 
     reportObject.result = result;
