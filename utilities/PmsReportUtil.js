@@ -72,6 +72,7 @@ class PmsReportUtil {
       const result = await service[functionName](dateTimePeriod, args);
       return result;
     } catch (err) {
+      reportObject.isError = true;
       return err.prettyMessage || 'Data currently unavailable.';
     }
   }

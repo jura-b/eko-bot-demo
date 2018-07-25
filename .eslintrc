@@ -3,6 +3,7 @@
   "rules": {
     "class-methods-use-this": "off",
     "no-param-reassign": "off",
-    "max-len": "off"
+    "max-len": "off",
+    "no-await-in-loop": "off"
   }
 }
