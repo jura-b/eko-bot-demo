@@ -3,6 +3,7 @@ const _ = require('lodash');
 class PmsReportUtil {
   static getReportObject(reportName, params, pmsService) {
     const { serviceName, dateTimePeriod } = params;
+    const currency = process.env.CURRENCY || ' GBP';
     const reportNameMapper = {
       // 'summary report': {
       //   name: 'summary report',
@@ -24,7 +25,7 @@ class PmsReportUtil {
         functionName: 'getAverageDailyRate',
         service: pmsService,
         dateTimePeriod,
-        unit: ' GBP',
+        unit: ` ${currency}`,
       },
       'revenue par': {
         name: 'revenue par',
@@ -32,7 +33,7 @@ class PmsReportUtil {
         functionName: 'getRevenuePar',
         service: pmsService,
         dateTimePeriod,
-        unit: ' GBP',
+        unit: ` ${currency}`,
       },
       'service revenue': {
         name: 'service revenue',
@@ -45,7 +46,7 @@ class PmsReportUtil {
         arguments: {
           serviceName,
         },
-        unit: ' GBP',
+        unit: ` ${currency}`,
       },
     };
 
