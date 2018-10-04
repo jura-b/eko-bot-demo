@@ -98,11 +98,13 @@ class ComancheService extends BasePmsService {
       throw err;
     }
 
+    const roomCount = process.env.COMANCHE_ROOM_COUNT;
     const periodPrefix = this.getSMDashboardKey(dateTimePeriod);
     const dailyData = await this.getDailyData(dateTimePeriod);
     const dataKey = `sm_dashboard.${periodPrefix}Occ`;
-    const occupancyRate = _.get(dailyData, dataKey);
-    if (['string', 'number'].includes(typeof occupancyRate)) {
+    const occupancyCount = _.get(dailyData, dataKey);
+    if (['string', 'number'].includes(typeof occupancyCount)) {
+      const occupancyRate = Number(occupancyCount) / (dateTimePeriod.dayCount * roomCount);
       return occupancyRate;
     }
 
