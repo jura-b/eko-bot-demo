@@ -104,7 +104,7 @@ class ComancheService extends BasePmsService {
     const dataKey = `sm_dashboard.${periodPrefix}Occ`;
     const occupancyCount = _.get(dailyData, dataKey);
     if (['string', 'number'].includes(typeof occupancyCount)) {
-      const occupancyRate = Number(occupancyCount) / (dateTimePeriod.dayCount * roomCount);
+      const occupancyRate = (Number(occupancyCount) * 100) / (dateTimePeriod.dayCount * roomCount);
       return occupancyRate;
     }
 

@@ -22,30 +22,31 @@ module.exports = async () => {
   now.setDate(now.getDate() - 1);
   const yesterday = now;
 
-  const yesterdayPeriod = DateTimeResolver.asDatePeriod(yesterday);
+  const todayPeriod = DateTimeResolver.asDatePeriod(new Date());
+  // const yesterdayPeriod = DateTimeResolver.asDatePeriod(yesterday);
   const monthPeriod = DateTimeResolver.asDatePeriod('month to date');
   const yearPeriod = DateTimeResolver.asDatePeriod('year to date');
 
   const ocrReportObjects = [
-    PmsReportUtil.getReportObject('occupancy rate', { dateTimePeriod: yesterdayPeriod }, pmsService),
+    PmsReportUtil.getReportObject('occupancy rate', { dateTimePeriod: todayPeriod }, pmsService),
     PmsReportUtil.getReportObject('occupancy rate', { dateTimePeriod: monthPeriod }, pmsService),
     PmsReportUtil.getReportObject('occupancy rate', { dateTimePeriod: yearPeriod }, pmsService),
   ];
 
   const adrReportObjects = [
-    PmsReportUtil.getReportObject('average daily rate', { dateTimePeriod: yesterdayPeriod }, pmsService),
+    PmsReportUtil.getReportObject('average daily rate', { dateTimePeriod: todayPeriod }, pmsService),
     PmsReportUtil.getReportObject('average daily rate', { dateTimePeriod: monthPeriod }, pmsService),
     PmsReportUtil.getReportObject('average daily rate', { dateTimePeriod: yearPeriod }, pmsService),
   ];
 
   const revParReportObjects = [
-    PmsReportUtil.getReportObject('revenue par', { dateTimePeriod: yesterdayPeriod }, pmsService),
+    PmsReportUtil.getReportObject('revenue par', { dateTimePeriod: todayPeriod }, pmsService),
     PmsReportUtil.getReportObject('revenue par', { dateTimePeriod: monthPeriod }, pmsService),
     PmsReportUtil.getReportObject('revenue par', { dateTimePeriod: yearPeriod }, pmsService),
   ];
 
   const serviceReportObjects = [
-    PmsReportUtil.getReportObject('service revenue', { dateTimePeriod: yesterdayPeriod, serviceName: 'spa' }, pmsService),
+    PmsReportUtil.getReportObject('service revenue', { dateTimePeriod: todayPeriod, serviceName: 'spa' }, pmsService),
     PmsReportUtil.getReportObject('service revenue', { dateTimePeriod: monthPeriod, serviceName: 'spa' }, pmsService),
     PmsReportUtil.getReportObject('service revenue', { dateTimePeriod: yearPeriod, serviceName: 'spa' }, pmsService),
   ];
